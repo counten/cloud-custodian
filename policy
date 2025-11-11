@@ -1,0 +1,58 @@
+policies:
+  - name: CodeArtsRepo-Project-Inherit-cts
+    description: open inherit for project core
+    resource: huaweicloud.codeartsrepo-project
+    mode:
+      type: cloudtrace
+      xrole: CustodianExecutionForFunctionAgency
+      enable_lts_log: true
+      log_level: INFO
+      events:
+        - source: "CodeArtsRepo.Project"
+          event: "updateProjectInheritCfg"
+          ids: "resource_id"
+          code: 200
+    filters:
+      - type: not-inherit
+    actions:
+      - type: set-project-inherit-settings
+        protected_branches_enable: True
+        watermark_enable: True
+
+policies:
+  - name: CodeArtsRepo-Project-Open-Watermark-cts
+    description: open watermark for project cts
+    resource: huaweicloud.codeartsrepo-project
+    mode:
+      type: cloudtrace
+      xrole: CustodianExecutionForFunctionAgency
+      enable_lts_log: true
+      log_level: INFO
+      events:
+        - source: "CodeArtsRepo.Project"
+          event: "updateProjectWatermark"
+          ids: "resource_id"
+          code: 200
+    filters:
+      - type: not-opened
+    actions:
+      - type: open-watermark
+
+policies:
+  - name: CodeArtsRepo-Project-protected-branch-cts
+    description: protect branch for project cts
+    resource: huaweicloud.codeartsrepo-project
+    mode:
+      type: cloudtrace
+      xrole: CustodianExecutionForFunctionAgency
+      enable_lts_log: true
+      log_level: INFO
+      events:
+        - source: "CodeArtsRepo.Project"
+          event: "batchDeleteProjectProtectedBranch"
+          ids: "resource_id"
+          code: 201
+    filters:
+      - type: not-protected
+    actions:
+      - type: create-protected-branches
